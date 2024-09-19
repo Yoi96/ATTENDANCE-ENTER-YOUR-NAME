@@ -3,6 +3,7 @@ const lastNameInput = document.getElementById('lastName');
 const displayNameDiv = document.getElementById('displayName');
 const submitButton = document.getElementById('submitButton');
 const saveButton = document.getElementById('saveButton');
+const emailButton = document.getElementById('emailButton');
 const submittedNamesList = document.getElementById('submittedNamesList');
 
 // Load submitted names from localStorage
@@ -92,4 +93,23 @@ saveButton.addEventListener('click', function() {
     // Clean up
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
+});
+
+// Save submitted names as an email
+emailButton.addEventListener('click', function() {
+    if (submittedNames.length === 0) {
+        alert('No names to email.');
+        return;
+    }
+
+    // Join submitted names into a single string with line breaks
+    const namesToEmail = submittedNames.join('\n');
+
+    // Create a mailto link
+    const subject = encodeURIComponent('Submitted Names');
+    const body = encodeURIComponent(namesToEmail);
+    const mailtoLink = `mailto:?subject=${subject}&body=${body}`;
+
+    // Open the user's email client
+    window.location.href = mailtoLink;
 });
