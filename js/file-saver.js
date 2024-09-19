@@ -1,5 +1,7 @@
 const firstNameInput = document.getElementById('firstName');
 const lastNameInput = document.getElementById('lastName');
+const osisNumberInput = document.getElementById('osisNumber');
+const schoolCheckboxes = document.querySelectorAll('#schoolCheckboxes input[type="checkbox"]'); // Get all checkboxes
 const displayNameDiv = document.getElementById('displayName');
 const submitButton = document.getElementById('submitButton');
 const saveButton = document.getElementById('saveButton');
@@ -12,9 +14,9 @@ let submittedNames = JSON.parse(localStorage.getItem('submittedNames')) || [];
 // Function to render names
 function renderNames() {
     submittedNamesList.innerHTML = ''; // Clear current list
-    submittedNames.forEach((name, index) => {
+    submittedNames.forEach((entry, index) => {
         const li = document.createElement('li');
-        li.textContent = `${index + 1}: ${name}`; // Add index number before the name
+        li.textContent = `${index + 1}: ${entry}`; // Display entry
 
         // Create a remove button
         const removeButton = document.createElement('button');
@@ -32,30 +34,55 @@ renderNames();
 // Update displayed name as the user types
 firstNameInput.addEventListener('input', updateDisplayName);
 lastNameInput.addEventListener('input', updateDisplayName);
+osisNumberInput.addEventListener('input', updateDisplayName);
 
 function updateDisplayName() {
     const firstName = firstNameInput.value.trim();
     const lastName = lastNameInput.value.trim();
-    displayNameDiv.textContent = `${firstName} ${lastName}`.trim(); // Updated format
+    const osisNumber = osisNumberInput.value.trim();
+    const selectedSchools = Array.from(schoolCheckboxes)
+        .filter(checkbox => checkbox.checked)
+        .map(checkbox => checkbox.value); // Get selected schools
+
+    displayNameDiv.textContent = `${firstName} ${lastName} (OSIS: ${osisNumber})${selectedSchools.length ? ` - ${selectedSchools.join(', ')}` : ''}`.trim();
 }
 
 // Submit name functionality
 submitButton.addEventListener('click', function() {
     const firstName = firstNameInput.value.trim();
     const lastName = lastNameInput.value.trim();
+    const osisNumber = osisNumberInput.value.trim();
+    const selectedSchools = Array.from(schoolCheckboxes)
+        .filter(checkbox => checkbox.checked)
+        .map(checkbox => checkbox.value); // Get selected schools
 
-    if (firstName === '' || lastName === '') {
-        alert('Please enter both your first and last name to submit.');
+    // Check for empty fields and OSIS number length
+    if (firstName === '' || lastName === '' || osisNumber === '' || selectedSchools.length === 0) {
+        alert('Please enter your first name, last name, OSIS number, and select at least one school to submit.');
         return;
     }
 
-    // Add name to the array in the format "firstName, lastName"
-    submittedNames.push(`${firstName}, ${lastName}`);
+    if (osisNumber.length !== 9 || isNaN(osisNumber)) {
+        alert('OSIS number must be a 9-digit number.');
+        return;
+    }
+
+    // Check for uniqueness of OSIS number
+    const osisExists = submittedNames.some(entry => entry.includes(`(OSIS: ${osisNumber})`));
+    if (osisExists) {
+        alert('This OSIS number has already been submitted. Please enter a unique OSIS number.');
+        return;
+    }
+
+    // Add name to the array in the format "firstName, lastName (OSIS: osisNumber) - schools"
+    submittedNames.push(`${firstName}, ${lastName} (OSIS: ${osisNumber}) - ${selectedSchools.join(', ')}`);
     localStorage.setItem('submittedNames', JSON.stringify(submittedNames)); // Save to localStorage
 
     // Clear the inputs and display area after submitting
     firstNameInput.value = '';
     lastNameInput.value = '';
+    osisNumberInput.value = '';
+    schoolCheckboxes.forEach(checkbox => checkbox.checked = false); // Reset checkboxes
     displayNameDiv.textContent = '';
 
     // Re-render names
