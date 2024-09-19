@@ -1,4 +1,5 @@
 const firstNameInput = document.getElementById('firstName');
+const middleNameInput = document.getElementById('middleName');
 const lastNameInput = document.getElementById('lastName');
 const osisNumberInput = document.getElementById('osisNumber');
 const schoolCheckboxes = document.querySelectorAll('#schoolCheckboxes input[type="checkbox"]'); // Get all checkboxes
@@ -33,23 +34,26 @@ renderNames();
 
 // Update displayed name as the user types
 firstNameInput.addEventListener('input', updateDisplayName);
+middleNameInput.addEventListener('input', updateDisplayName);
 lastNameInput.addEventListener('input', updateDisplayName);
 osisNumberInput.addEventListener('input', updateDisplayName);
 
 function updateDisplayName() {
     const firstName = firstNameInput.value.trim();
+    const middleName = middleNameInput.value.trim();
     const lastName = lastNameInput.value.trim();
     const osisNumber = osisNumberInput.value.trim();
     const selectedSchools = Array.from(schoolCheckboxes)
         .filter(checkbox => checkbox.checked)
         .map(checkbox => checkbox.value); // Get selected schools
 
-    displayNameDiv.textContent = `${firstName} ${lastName} (OSIS: ${osisNumber})${selectedSchools.length ? ` - ${selectedSchools.join(', ')}` : ''}`.trim();
+    displayNameDiv.textContent = `${firstName} ${middleName} ${lastName} (OSIS: ${osisNumber})${selectedSchools.length ? ` - ${selectedSchools.join(', ')}` : ''}`.trim();
 }
 
 // Submit name functionality
 submitButton.addEventListener('click', function() {
     const firstName = firstNameInput.value.trim();
+    const middleName = middleNameInput.value.trim();
     const lastName = lastNameInput.value.trim();
     const osisNumber = osisNumberInput.value.trim();
     const selectedSchools = Array.from(schoolCheckboxes)
@@ -75,11 +79,12 @@ submitButton.addEventListener('click', function() {
     }
 
     // Add name to the array in the format "firstName, lastName (OSIS: osisNumber) - schools"
-    submittedNames.push(`${firstName}, ${lastName} (OSIS: ${osisNumber}) - ${selectedSchools.join(', ')}`);
+    submittedNames.push(`${firstName},${middleName}, ${lastName} (OSIS: ${osisNumber}) - ${selectedSchools.join(', ')}`);
     localStorage.setItem('submittedNames', JSON.stringify(submittedNames)); // Save to localStorage
 
     // Clear the inputs and display area after submitting
     firstNameInput.value = '';
+    middleNameInput.value = '';
     lastNameInput.value = '';
     osisNumberInput.value = '';
     schoolCheckboxes.forEach(checkbox => checkbox.checked = false); // Reset checkboxes
