@@ -97,17 +97,6 @@ input
 	text-transform: uppercase;
 	font-weight: bold;
 }
-#emailButton
-{
-	color: white;
-	background:#11418C;
-	border: none;
-	line-height:2em;
-	width: 100%;
-	font-size: 1.2em;
-	text-transform: uppercase;
-	font-weight: bold;
-}
 
 #saveButton,#emailButton
 {
@@ -116,17 +105,6 @@ input
 }
 
 #saveButton:hover,#emailButton:hover
-{
-	background:red;
-}
-
-#emailButton
-{
-	background: orange;
-	margin-top: 2em;
-}
-
-#emailButton:hover
 {
 	background:red;
 }
@@ -228,6 +206,8 @@ span
 	border-bottom-right-radius:0.5em;
 	border-top-right-radius:0.5em;
 }
+
+#emailButton a{color: white;}
 
 
 
