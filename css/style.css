@@ -86,23 +86,25 @@ input
 	line-height: 2em;
 }
 
-#submitButton, #saveButton
+#submitButton, #saveButton,#emailButton
 {
 	color: white;
 	background:#11418C;
 	border: none;
-	line-height: 3em;
+	line-height:2em;
 	width: 100%;
 	font-size: 1.2em;
+	text-transform: uppercase;
+	font-weight: bold;
 }
 
-#saveButton
+#saveButton,#emailButton
 {
 	background: orange;
 	margin-top: 2em;
 }
 
-#saveButton:hover
+#saveButton:hover,#emailButton:hover
 {
 	background:red;
 }
@@ -114,13 +116,13 @@ input
 
 #submitButton
 {
-	float: left;
+	 
 	margin-bottom: 2em;
 
 }
 #saveButton
 {
-	float: right;
+	 
 	font-weight: bolder;
 }
 
