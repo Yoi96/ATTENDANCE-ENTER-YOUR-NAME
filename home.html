@@ -12,7 +12,7 @@
     </style>
 </head>
 <body>
-    <h1>Supabase Records</h1>
+    <h1>Supabase Students</h1>
     <form id="record-form">
         <input type="hidden" id="record-id">
         <label for="first_name">First Name:</label>
@@ -35,17 +35,19 @@
 
     <div id="message"></div>
 
-    <h2>Existing Records</h2>
+    <h2>Existing Students</h2>
     <ul id="record-list"></ul>
 
     <script>
-        // Replace with your Supabase URL and public API key
         
-import { createClient } from '@supabase/supabase-js'
+const supabaseUrl = 'https://fejedqaukushmsneqneb.supabase.co';
+const supabaseKey = String.fromEnvironment('SUPABASE_KEY');
 
-const supabaseUrl = 'https://fejedqaukushmsneqneb.supabase.co'
-const supabaseKey = process.env.SUPABASE_KEY
-const supabase = createClient(supabaseUrl, supabaseKey)
+Future<void> main() async {
+  await Supabase.initialize(url: supabaseUrl, anonKey: supabaseKey);
+  runApp(MyApp());
+}
+
         const { createClient } = supabase;
         const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
@@ -62,11 +64,12 @@ const supabase = createClient(supabaseUrl, supabaseKey)
             if (id) {
                 // Update record
                 const { data, error } = await supabase
-                    .from('your_table_name') // Replace with your table name
+                    .from('students') // Table name
                     .update({ first_name, middle_name, last_name, schools, osisNumber })
                     .eq('id', id);
                 
                 if (error) {
+                    console.error("Error updating record:", error);
                     document.getElementById('message').innerText = error.message;
                 } else {
                     document.getElementById('message').innerText = 'Record updated successfully!';
@@ -74,10 +77,11 @@ const supabase = createClient(supabaseUrl, supabaseKey)
             } else {
                 // Insert new record
                 const { data, error } = await supabase
-                    .from('your_table_name') // Replace with your table name
+                    .from('students') // Table name
                     .insert({ first_name, middle_name, last_name, schools, osisNumber });
 
                 if (error) {
+                    console.error("Error inserting record:", error);
                     document.getElementById('message').innerText = error.message;
                 } else {
                     document.getElementById('message').innerText = 'Record added successfully!';
@@ -90,12 +94,13 @@ const supabase = createClient(supabaseUrl, supabaseKey)
 
         async function fetchRecords() {
             const { data, error } = await supabase
-                .from('your_table_name') // Replace with your table name
+                .from('students') // Table name
                 .select();
 
             if (error) {
-                console.error(error);
+                console.error("Error fetching records:", error);
             } else {
+                console.log("Fetched records:", data); // Log the fetched records
                 const recordList = document.getElementById('record-list');
                 recordList.innerHTML = '';
                 data.forEach(record => {
