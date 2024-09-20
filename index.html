@@ -3,135 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Supabase CRUD Example</title>
+    <title>Save Student Information</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js/dist/umd/supabase.js"></script>
-    <style>
-        body { font-family: Arial, sans-serif; }
-        form { margin-bottom: 20px; }
-        input { margin-bottom: 10px; display: block; }
-    </style>
 </head>
 <body>
-    <h1>Supabase Students</h1>
-    <form id="record-form">
-        <input type="hidden" id="record-id">
+    <h1>Student Information Form</h1>
+    <form id="student-form">
         <label for="first_name">First Name:</label>
-        <input type="text" id="first_name" required>
-        
+        <input type="text" id="first_name" required><br>
+
         <label for="middle_name">Middle Name:</label>
-        <input type="text" id="middle_name">
-        
+        <input type="text" id="middle_name"><br>
+
         <label for="last_name">Last Name:</label>
-        <input type="text" id="last_name" required>
-        
+        <input type="text" id="last_name" required><br>
+
         <label for="schools">Schools:</label>
-        <input type="text" id="schools">
-        
-        <label for="osisNumber">OSIS Number:</label>
-        <input type="text" id="osisNumber" required>
-        
-        <button type="submit">Add/Update Record</button>
+        <input type="text" id="schools" required><br>
+
+        <label for="osis_number">OSIS Number:</label>
+        <input type="text" id="osis_number" required><br>
+
+        <button type="submit">Submit</button>
     </form>
 
-    <div id="message"></div>
-
-    <h2>Existing Students</h2>
-    <ul id="record-list"></ul>
-
     <script>
-        
-const supabaseUrl = 'https://fejedqaukushmsneqneb.supabase.co';
+        const supabaseUrl = 'https://fejedqaukushmsneqneb.supabase.co';
 const supabaseKey = String.fromEnvironment('SUPABASE_KEY');
+        const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
-Future<void> main() async {
-  await Supabase.initialize(url: supabaseUrl, anonKey: supabaseKey);
-  runApp(MyApp());
-}
-
-        const { createClient } = supabase;
-        const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-        document.getElementById('record-form').addEventListener('submit', async (e) => {
+        document.getElementById('student-form').addEventListener('submit', async (e) => {
             e.preventDefault();
 
-            const id = document.getElementById('record-id').value;
-            const first_name = document.getElementById('first_name').value;
-            const middle_name = document.getElementById('middle_name').value;
-            const last_name = document.getElementById('last_name').value;
+            const firstName = document.getElementById('first_name').value;
+            const middleName = document.getElementById('middle_name').value;
+            const lastName = document.getElementById('last_name').value;
             const schools = document.getElementById('schools').value;
-            const osisNumber = document.getElementById('osisNumber').value;
+            const osisNumber = document.getElementById('osis_number').value;
 
-            if (id) {
-                // Update record
-                const { data, error } = await supabase
-                    .from('students') // Table name
-                    .update({ first_name, middle_name, last_name, schools, osisNumber })
-                    .eq('id', id);
-                
-                if (error) {
-                    console.error("Error updating record:", error);
-                    document.getElementById('message').innerText = error.message;
-                } else {
-                    document.getElementById('message').innerText = 'Record updated successfully!';
-                }
-            } else {
-                // Insert new record
-                const { data, error } = await supabase
-                    .from('students') // Table name
-                    .insert({ first_name, middle_name, last_name, schools, osisNumber });
-
-                if (error) {
-                    console.error("Error inserting record:", error);
-                    document.getElementById('message').innerText = error.message;
-                } else {
-                    document.getElementById('message').innerText = 'Record added successfully!';
-                }
-            }
-
-            clearForm();
-            fetchRecords(); // Refresh the list after add/update
-        });
-
-        async function fetchRecords() {
             const { data, error } = await supabase
-                .from('students') // Table name
-                .select();
+                .from('students') // Replace 'students' with your actual table name
+                .insert([
+                    { 
+                        first_name: firstName, 
+                        middle_name: middleName, 
+                        last_name: lastName, 
+                        schools: schools, 
+                        osis_number: osisNumber 
+                    }
+                ]);
 
             if (error) {
-                console.error("Error fetching records:", error);
+                console.error('Error inserting data:', error);
             } else {
-                console.log("Fetched records:", data); // Log the fetched records
-                const recordList = document.getElementById('record-list');
-                recordList.innerHTML = '';
-                data.forEach(record => {
-                    const li = document.createElement('li');
-                    li.innerText = `${record.first_name} ${record.last_name} - OSIS: ${record.osisNumber}`;
-                    li.addEventListener('click', () => populateForm(record));
-                    recordList.appendChild(li);
-                });
+                console.log('Data inserted successfully:', data);
+                alert('Student information saved!');
+                document.getElementById('student-form').reset(); // Reset the form
             }
-        }
-
-        function clearForm() {
-            document.getElementById('record-id').value = '';
-            document.getElementById('first_name').value = '';
-            document.getElementById('middle_name').value = '';
-            document.getElementById('last_name').value = '';
-            document.getElementById('schools').value = '';
-            document.getElementById('osisNumber').value = '';
-        }
-
-        function populateForm(record) {
-            document.getElementById('record-id').value = record.id;
-            document.getElementById('first_name').value = record.first_name;
-            document.getElementById('middle_name').value = record.middle_name || '';
-            document.getElementById('last_name').value = record.last_name;
-            document.getElementById('schools').value = record.schools || '';
-            document.getElementById('osisNumber').value = record.osisNumber;
-        }
-
-        // Initial fetch of records
-        fetchRecords();
+        });
     </script>
 </body>
 </html>
