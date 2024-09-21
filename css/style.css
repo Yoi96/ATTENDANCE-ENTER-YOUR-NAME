@@ -30,14 +30,7 @@ a
 img{margin-left: auto;
   margin-right: auto;}
 
-#wrap
-{
-	width: 100%;
-	height: auto;
-	font-family: 'fonts', sans-serif;
-	padding: 0px;
-	margin-top: 2em;
-}
+#wrap{width: 100%; height: auto; padding: 0px; margin: 0px;}
 
 #main_body
 {
@@ -45,34 +38,26 @@ img{margin-left: auto;
 	height: auto;
 	margin: 0px auto;
 	padding:0px;
+	margin-top: 2em;
+	display: grid;
+	grid-template-columns:auto auto;
 }
 
-#wrap_body
-	{
-		width: 100%;
-		height: auto;
-		display: grid;
-		grid-template-columns:auto auto;
-
-	}
-
-
+/*
 #logo 
 {
     width: 100%;
     height:6em; 
     background: url('../images/logos.png') no-repeat center; 
     background-size: contain;
-}
+}*/
 
-#title
+#fullname_title
 {
-	width: 100%;
-	font-size:3em;
+	font-size:2em;
 	font-weight: bolder;
 	font-family: "Calistoga", serif;
 	color:#11418C;
-	margin-top: 1.2em;
 	padding: 0px;
 	text-transform: uppercase;
 	text-align: center;
@@ -100,7 +85,7 @@ input
 	border: none;
 	line-height:2em;
 	width: 100%;
-	font-size: 1.2em;
+	font-size: 1em;
 	text-transform: uppercase;
 	font-weight: bold;
 }
@@ -136,12 +121,13 @@ input
 
 #fullname
 {
-	width:460px;
+	width:350px;
 	border: 1px solid #CCC;
 	overflow: hidden;
 	margin: auto;
 	padding:2em;
 }
+
 #fullname #title
 {
  
@@ -164,6 +150,7 @@ input
 	font-size:1.5em;
 	text-transform: uppercase;
 	font-weight: bolder;
+	margin-bottom: 1em;
 }
 span
 {
@@ -173,7 +160,7 @@ span
 
 #displayName
 {
-	line-height: 1em;
+	line-height:1em;
 	padding: 1em;
 	font-size:1.2em;
 	border: 1px solid #CCC;
@@ -182,7 +169,7 @@ span
 
 #submittedNamesList
 {
-	line-height:3em;
+	line-height:2em;
 }
 
 #submittedNamesList button
@@ -204,30 +191,33 @@ span
 
 #fullname2
 {
-	width:600px;
 	overflow: hidden;
 	margin: auto;
-	padding:1em;
+	padding:2em;
 	background: #11418C;
 	color: white;
 	border-bottom-right-radius:0.5em;
 	border-top-right-radius:0.5em;
+	width: 620px;
 }
 
 #emailButton a{color: white;}
 
 
 
-@media only screen and (max-width:768px)
+@media only screen and (max-width:700px)
 {
-	#wrap_body
+	#main_body
 		{
-			width: 100%;
-			height: auto;
-			display: grid;
 			grid-template-columns:auto;
 
 		}
+	#fullname2
+	{
+		width: 350px;
+		border-radius: 0px;
+	}
+
 
 }
 
