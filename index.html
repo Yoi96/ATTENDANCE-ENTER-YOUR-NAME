@@ -2,127 +2,84 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <link rel="stylesheet" type="text/css" href="css/style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Attendance Form</title>
-</head>  
+  <style>
+    /* Basic styling */
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    #wrap { max-width: 600px; margin: auto; }
+    label { display: block; margin-top: 10px; }
+    input[type="text"], input[type="number"] { width: 100%; padding: 8px; box-sizing: border-box; }
+    #schoolCheckboxes label { display: inline-block; margin-right: 10px; }
+    button { margin-top: 15px; padding: 10px 20px; cursor: pointer; }
+    #submittedNamesList { margin-top: 20px; }
+  </style>
+
+  <!-- Supabase JS Client -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/supabase.min.js"></script>
+</head>
 <body>
 
 <div id="wrap">
-  <div id="main_body">
+  <h1>Attendance</h1>
+  <h2>Enter Your Name</h2>
 
-    <div id="fullname">
-      <img src="images/logos.png" height="65em" alt="Logo" >
+  <label for="firstName">First Name:</label>
+  <input type="text" id="firstName" placeholder="Type your first name..." />
 
-      <div id="fullname_title">Attendance</div>
-      <div id="fullname_title">Enter Your Name</div>
+  <label for="middleName">Middle Name:</label>
+  <input type="text" id="middleName" placeholder="Middle Name" />
 
-      <div id="name">
-        <label for="firstName">First Name:</label>
-      </div>
-      <div id="name">
-        <input type="text" id="firstName" placeholder="Type your first name..." />
-      </div>
+  <label for="lastName">Last Name:</label>
+  <input type="text" id="lastName" placeholder="Type your last name..." />
 
-      <div id="name">
-        <label for="middleName">Middle Name:</label>
-      </div>
-      <div id="name">
-        <input type="text" id="middleName" placeholder="Middle Name" />
-      </div>
+  <label for="osisNumber">OSIS Number/Student ID:</label>
+  <input type="text" id="osisNumber" placeholder="OSIS Number" />
 
-      <div id="name">
-        <label for="lastName">Last Name:</label>
-      </div>
-      <div id="name">
-        <input type="text" id="lastName" placeholder="Type your last name..." />
-      </div>
+  <label for="gradeLevel">Grade Level:</label>
+  <input type="number" id="gradeLevel" placeholder="e.g., 9" min="1" max="12" />
 
-      <div id="name">
-        <label for="osisNumber">OSIS Number/Student ID:</label>
-      </div>
-      <div id="name">
-        <input type="text" id="osisNumber" placeholder="OSIS Number" />
-      </div>
-
-      <div id="name">
-        <label for="gradeLevel">Grade Level:</label>
-      </div>
-      <div id="name">
-        <input type="number" id="gradeLevel" placeholder="e.g., 9" min="1" max="12" />
-      </div>
-
-      <div id="name">
-        <label>Your School:</label>
-      </div>
-
-      <div id="schoolCheckboxes">
-        <label>
-          <input type="checkbox" value="Mott Hall High School (Harlem)" />
-          <span class="schoolname">Mott Hall High School (Harlem)</span>
-        </label><br>
-
-        <label>
-          <input type="checkbox" value="Eagle Academy for Young Men of Harlem" />
-          <span class="schoolname">Eagle Academy for Young Men of Harlem</span>
-        </label><br>
-
-        <label>
-          <input type="checkbox" value="Urban Assembly School of Global Commerce" />
-          <span class="schoolname">Urban Assembly School of Global Commerce</span>
-        </label><br>
-
-        <label>
-          <input type="checkbox" value="A. Philip Randolph" />
-          <span class="schoolname">A. Philip Randolph</span>
-        </label>
-      </div>
-
-      <div id="name">
-        <button id="submitButton">Submit</button>
-      </div>
-
-      <div id="title2">Your name is:</div>
-      <span>(You can click the button to submit before checking that your name is correct)</span>
-      <div id="displayName">&nbsp;</div>
-    </div>
-
-    <div id="fullname2">
-      <h3>Submitted Names:</h3>
-      <ul id="submittedNamesList"></ul>
-      <button id="saveButton">Save as Text File</button>
-      <button id="emailButton"><a href="mailto:xiaoyiliu96xyl@gmail.com">Email Names</a></button>
-    </div>
-
+  <label>Your School:</label>
+  <div id="schoolCheckboxes">
+    <label><input type="checkbox" value="Mott Hall High School (Harlem)" /> Mott Hall High School (Harlem)</label>
+    <label><input type="checkbox" value="Eagle Academy for Young Men of Harlem" /> Eagle Academy for Young Men of Harlem</label>
+    <label><input type="checkbox" value="Urban Assembly School of Global Commerce" /> Urban Assembly School of Global Commerce</label>
+    <label><input type="checkbox" value="A. Philip Randolph" /> A. Philip Randolph</label>
   </div>
+
+  <button id="submitButton">Submit</button>
+
+  <h3>Your name is:</h3>
+  <div id="displayName">&nbsp;</div>
+
+  <h3>Submitted Names:</h3>
+  <ul id="submittedNamesList"></ul>
+  <button id="saveButton">Save as Text File</button>
+  <button id="emailButton"><a href="mailto:xiaoyiliu96xyl@gmail.com">Email Names</a></button>
 </div>
 
 <script>
   const SUPABASE_URL = 'https://cpnbxqfduxtdufhdkuig.supabase.co';
   const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNwbmJ4cWZkdXh0ZHVmaGRrdWlnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDgwMjg2MjEsImV4cCI6MjA2MzYwNDYyMX0.ipVyFBRyfV_HQjDCR-_wzK-LMTuw0UE3x59gVPOtf7A';
 
-  async function saveToSupabase(data) {
-    try {
-      const response = await fetch(`${SUPABASE_URL}/rest/v1/students`, {
-        method: 'POST',
-        headers: {
-          'apikey': SUPABASE_KEY,
-          'Authorization': `Bearer ${SUPABASE_KEY}`,
-          'Content-Type': 'application/json',
-          'Prefer': 'return=minimal'
-        },
-        body: JSON.stringify(data)
-      });
+  const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-      if (!response.ok) throw new Error(await response.text());
+  async function saveToSupabase(data) {
+    const { error } = await supabase
+      .from('students')
+      .insert([data]);
+
+    if (error) {
+      console.error("Supabase insert error:", error);
+      alert("Failed to save to database: " + error.message);
+      return false;
+    } else {
       alert("Saved to Supabase!");
-    } catch (error) {
-      console.error("Database error:", error);
-      alert("Failed to save to database.");
+      return true;
     }
   }
 
-  document.getElementById("submitButton").addEventListener("click", () => {
+  document.getElementById("submitButton").addEventListener("click", async () => {
     const firstName = document.getElementById("firstName").value.trim();
     const middleName = document.getElementById("middleName").value.trim();
     const lastName = document.getElementById("lastName").value.trim();
@@ -171,7 +128,7 @@
       grade_level: Number(gradeLevel)
     };
 
-    saveToSupabase(data);
+    await saveToSupabase(data);
   });
 
   document.getElementById("saveButton").addEventListener("click", () => {
