@@ -9,87 +9,93 @@
 <body>
 
 <div id="wrap">
-     <div id="main_body">
- 
-             <div id="fullname">
-                 <!---<div id="logo">&nbsp;</div>--->
-                 <img src="images/logos.png" height="65em" >
-                 <div id="fullname_title">Attendance</div>
-                <div id="fullname_title">Enter Your Name</div>
+  <div id="main_body">
 
-                 <div id="name">
-                     <label for="firstName">First Name:</label>
-                 </div>
-                 <div id="name">
-                     <input type="text" id="firstName" placeholder="Type your first name...">
-                 </div>
+    <div id="fullname">
+      <img src="images/logos.png" height="65em" alt="Logo" >
 
+      <div id="fullname_title">Attendance</div>
+      <div id="fullname_title">Enter Your Name</div>
 
-                  <div id="name">
-                     <label for="middleName">Middle Name:</label>
-                 </div>
-                 <input type="text" id="middleName" placeholder="Middle Name" />
+      <div id="name">
+        <label for="firstName">First Name:</label>
+      </div>
+      <div id="name">
+        <input type="text" id="firstName" placeholder="Type your first name..." />
+      </div>
 
+      <div id="name">
+        <label for="middleName">Middle Name:</label>
+      </div>
+      <div id="name">
+        <input type="text" id="middleName" placeholder="Middle Name" />
+      </div>
 
-                 <div id="name">
-                     <label for="lastName">Last Name:</label>
-                 </div>
-                 <div id="name">
-                     <input type="text" id="lastName" placeholder="Type your last name...">
-                 </div>
+      <div id="name">
+        <label for="lastName">Last Name:</label>
+      </div>
+      <div id="name">
+        <input type="text" id="lastName" placeholder="Type your last name..." />
+      </div>
 
-                 <div id="name">
-                     <label for="osisnumber">OSIS Number/Studnet ID:</label>
-                 </div>
-                 <div id="name">
-                     <input type="text" id="osisNumber" placeholder="OSIS Number" />
+      <div id="name">
+        <label for="osisNumber">OSIS Number/Student ID:</label>
+      </div>
+      <div id="name">
+        <input type="text" id="osisNumber" placeholder="OSIS Number" />
+      </div>
 
-                 </div>
-                 <div id="name">
-                 <label>Grade Level:</label>
-      <input type="number" id="gradeLevel" placeholder="e.g., 9" min="1" max="12"><br>
-         </div>
+      <div id="name">
+        <label for="gradeLevel">Grade Level:</label>
+      </div>
+      <div id="name">
+        <input type="number" id="gradeLevel" placeholder="e.g., 9" min="1" max="12" />
+      </div>
 
-                 <div id="name">
-                     <label for="osisnumber">Your School:</label>
-                 </div>
+      <div id="name">
+        <label>Your School:</label>
+      </div>
 
-                 <div id="schoolCheckboxes">
-                    <label><input type="checkbox" value="Mott Hall High School (Harlem)" /></label>
-                    <span class="schoolname">Mott Hall High School (Harlem)</span>
+      <div id="schoolCheckboxes">
+        <label>
+          <input type="checkbox" value="Mott Hall High School (Harlem)" />
+          <span class="schoolname">Mott Hall High School (Harlem)</span>
+        </label><br>
 
-                    <label><input type="checkbox" value="Eagle Academy for Young Men of Harlem" /> </label> 
-                    <span class="schoolname">Eagle Academy for Young Men of Harlem</span>
+        <label>
+          <input type="checkbox" value="Eagle Academy for Young Men of Harlem" />
+          <span class="schoolname">Eagle Academy for Young Men of Harlem</span>
+        </label><br>
 
-                    <label><input type="checkbox" value="Urban Assembly School of Global Commerce" /></label> 
-                    <span class="schoolname">Urban Assembly School of Global Commerce</span>
+        <label>
+          <input type="checkbox" value="Urban Assembly School of Global Commerce" />
+          <span class="schoolname">Urban Assembly School of Global Commerce</span>
+        </label><br>
 
-                    <label><input type="checkbox" value="A. Philip Randolph" /></label>
-                    <span class="schoolname">A. Philip Randolph</span>
-                </div>
+        <label>
+          <input type="checkbox" value="A. Philip Randolph" />
+          <span class="schoolname">A. Philip Randolph</span>
+        </label>
+      </div>
 
+      <div id="name">
+        <button id="submitButton">Submit</button>
+      </div>
 
+      <div id="title2">Your name is:</div>
+      <span>(You can click the button to submit before checking that your name is correct)</span>
+      <div id="displayName">&nbsp;</div>
+    </div>
 
-
-
-                 <div id="name">
-                     <button id="submitButton">Submit</button>
-                 </div>
-
-                 <div id="title2">Your name is:</div>
-                 <span>(You can click the button to submit before checking that your name is correct)</span>
-                 <div id="displayName">&nbsp;</div>
-             </div>
     <div id="fullname2">
       <h3>Submitted Names:</h3>
       <ul id="submittedNamesList"></ul>
       <button id="saveButton">Save as Text File</button>
-
       <button id="emailButton"><a href="mailto:xiaoyiliu96xyl@gmail.com">Email Names</a></button>
     </div>
+
   </div>
 </div>
-
 
 <script>
   const SUPABASE_URL = 'https://cpnbxqfduxtdufhdkuig.supabase.co';
