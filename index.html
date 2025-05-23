@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <link rel="stylesheet" type="text/css" href="css/style.css">
-  <title>Name Submission</title>
+  <title>Attendance Form</title>
 </head>  
 <body>
 
@@ -12,58 +12,41 @@
   <div id="main_body">
     <div id="fullname">
       <img src="images/logos.png" height="65em">
-      <div id="fullname_title">Attendance</div>
-      <div id="fullname_title">Enter Your Name</div>
+      <h1>Attendance</h1>
+      <h2>Enter Your Name</h2>
 
-      <div id="name">
-        <label for="firstName">First Name:</label>
-        <input type="text" id="firstName" placeholder="Type your first name...">
-      </div>
+      <label>First Name:</label>
+      <input type="text" id="firstName" placeholder="Type your first name..."><br>
 
-      <div id="name">
-        <label for="middleName">Middle Name:</label>
-        <input type="text" id="middleName" placeholder="Middle Name" />
-      </div>
+      <label>Middle Name:</label>
+      <input type="text" id="middleName" placeholder="Middle Name"><br>
 
-      <div id="name">
-        <label for="lastName">Last Name:</label>
-        <input type="text" id="lastName" placeholder="Type your last name...">
-      </div>
+      <label>Last Name:</label>
+      <input type="text" id="lastName" placeholder="Type your last name..."><br>
 
-      <div id="name">
-        <label for="osisNumber">OSIS Number/Student ID:</label>
-        <input type="text" id="osisNumber" placeholder="OSIS Number" />
-      </div>
+      <label>OSIS Number/Student ID:</label>
+      <input type="text" id="osisNumber" placeholder="OSIS Number"><br>
 
-      <div id="name">
-        <label for="school">Your School:</label>
-      </div>
-
+      <label>Your School:</label>
       <div id="schoolCheckboxes">
         <label><input type="checkbox" value="Mott Hall High School (Harlem)"> Mott Hall High School (Harlem)</label><br>
         <label><input type="checkbox" value="Eagle Academy for Young Men of Harlem"> Eagle Academy for Young Men of Harlem</label><br>
         <label><input type="checkbox" value="Urban Assembly School of Global Commerce"> Urban Assembly School of Global Commerce</label><br>
-        <label><input type="checkbox" value="A. Philip Randolph"> A. Philip Randolph</label>
-      </div>
+        <label><input type="checkbox" value="A. Philip Randolph"> A. Philip Randolph</label><br>
+      </div><br>
 
-      <div id="name">
-        <button id="submitButton">Submit</button>
-      </div>
+      <button id="submitButton">Submit</button>
+      <button id="saveToDBButton">Save to Database</button><br><br>
 
-      <div id="name">
-        <button id="saveToDBButton">Save to Database</button>
-      </div>
-
-      <div id="title2">Your name is:</div>
-      <span>(You can click the button to submit before checking that your name is correct)</span>
+      <h3>Your name is:</h3>
       <div id="displayName">&nbsp;</div>
     </div>
 
     <div id="fullname2">
-      <div id="title3">Submitted Names:</div>
+      <h3>Submitted Names:</h3>
       <ul id="submittedNamesList"></ul>
-      <button id="saveButton">Save Submitted Names as Text File</button>
-      <button id="emailButton"><a href="mailto:xiaoyiliu96xyl@gmail.com">Save Submitted Names as Email</a></button>
+      <button id="saveButton">Save as Text File</button>
+      <button><a href="mailto:xiaoyiliu96xyl@gmail.com">Email Names</a></button>
     </div>
   </div>
 </div>
@@ -98,19 +81,15 @@
     const middleName = document.getElementById("middleName").value.trim();
     const lastName = document.getElementById("lastName").value.trim();
     const osisNumber = document.getElementById("osisNumber").value.trim();
-
-    const schoolCheckboxes = document.querySelectorAll('#schoolCheckboxes input[type="checkbox"]');
-    let selectedSchool = "";
-    schoolCheckboxes.forEach(box => {
-      if (box.checked) selectedSchool = box.value;
-    });
+    const school = Array.from(document.querySelectorAll('#schoolCheckboxes input[type="checkbox"]:checked'))
+                        .map(cb => cb.value).join(', ');
 
     const fullName = `${firstName} ${middleName} ${lastName}`.trim();
     document.getElementById("displayName").innerText = fullName;
 
-    const listItem = document.createElement("li");
-    listItem.textContent = `${fullName} | OSIS: ${osisNumber} | School: ${selectedSchool}`;
-    document.getElementById("submittedNamesList").appendChild(listItem);
+    const li = document.createElement("li");
+    li.textContent = `${fullName} | OSIS: ${osisNumber} | School: ${school}`;
+    document.getElementById("submittedNamesList").appendChild(li);
   });
 
   document.getElementById("saveToDBButton").addEventListener("click", () => {
@@ -118,36 +97,25 @@
     const middleName = document.getElementById("middleName").value.trim();
     const lastName = document.getElementById("lastName").value.trim();
     const osisNumber = document.getElementById("osisNumber").value.trim();
+    const school = Array.from(document.querySelectorAll('#schoolCheckboxes input[type="checkbox"]:checked'))
+                        .map(cb => cb.value).join(', ');
 
-    const schoolCheckboxes = document.querySelectorAll('#schoolCheckboxes input[type="checkbox"]');
-    let selectedSchool = "";
-    schoolCheckboxes.forEach(box => {
-      if (box.checked) selectedSchool = box.value;
-    });
-
-    const studentData = {
+    const data = {
       first_name: firstName,
       middle_name: middleName,
       last_name: lastName,
       osis_id: osisNumber,
-      school_name: selectedSchool
+      school_name: school
     };
-
-    saveToSupabase(studentData);
+    saveToSupabase(data);
   });
 
-  // Save as text
   document.getElementById("saveButton").addEventListener("click", () => {
     const items = document.querySelectorAll("#submittedNamesList li");
-    if (items.length === 0) {
-      alert("No names to save.");
-      return;
-    }
+    if (items.length === 0) return alert("No names to save.");
 
     let text = "";
-    items.forEach(item => {
-      text += item.textContent + "\n";
-    });
+    items.forEach(item => text += item.textContent + "\n");
 
     const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
     const a = document.createElement("a");
