@@ -9,68 +9,44 @@
 <body>
 
 <div id="wrap">
-     <div id="main_body">
- 
-             <div id="fullname">
-                 <img src="images/logos.png" height="65em" >
-                 <div id="fullname_title">Attendance</div>
-                <div id="fullname_title">Enter Your Name</div>
+  <div id="main_body">
+    <div id="fullname">
+      <img src="images/logos.png" height="65em">
+      <h1>Attendance</h1>
+      <h2>Enter Your Name</h2>
 
-                 <div id="name">
-                     <label for="firstName">First Name:</label>
-                 </div>
-                 <div id="name">
-                     <input type="text" id="firstName" placeholder="Type your first name...">
-                 </div>
+      <label>First Name:</label>
+      <input type="text" id="firstName" placeholder="Type your first name..."><br>
 
-                  <div id="name">
-                     <label for="middleName">Middle Name:</label>
-                 </div>
-                 <input type="text" id="middleName" placeholder="Middle Name" />
+      <label>Middle Name:</label>
+      <input type="text" id="middleName" placeholder="Middle Name"><br>
 
-                 <div id="name">
-                     <label for="lastName">Last Name:</label>
-                 </div>
-                 <div id="name">
-                     <input type="text" id="lastName" placeholder="Type your last name...">
-                 </div>
+      <label>Last Name:</label>
+      <input type="text" id="lastName" placeholder="Type your last name..."><br>
 
-                 <div id="name">
-                     <label for="osisnumber">OSIS Number/Student ID:</label>
-                 </div>
-                 <div id="name">
-                     <input type="text" id="osisNumber" placeholder="OSIS Number" />
-                 </div>
+      <label>OSIS Number/Student ID:</label>
+      <input type="text" id="osisNumber" placeholder="OSIS Number"><br>
 
-                 <div id="name">
-                 <label>Grade Level:</label>
-                 <input type="number" id="gradeLevel" placeholder="e.g., 9" min="1" max="12" step="1"><br>
-                 </div>
+      <label>Your School:</label>
+      <div id="schoolCheckboxes">
+        <label><input type="checkbox" value="Mott Hall High School (Harlem)"> Mott Hall High School (Harlem)</label><br>
+        <label><input type="checkbox" value="Eagle Academy for Young Men of Harlem"> Eagle Academy for Young Men of Harlem</label><br>
+        <label><input type="checkbox" value="Urban Assembly School of Global Commerce"> Urban Assembly School of Global Commerce</label><br>
+        <label><input type="checkbox" value="A. Philip Randolph"> A. Philip Randolph</label><br>
+      </div><br>
 
-                 <div id="name">
-                     <label for="osisnumber">Your School:</label>
-                 </div>
+      <button id="submitButton">Submit</button>
+      <button id="saveToDBButton">Save to Database</button><br><br>
 
-                 <div id="schoolCheckboxes">
-                    <label><input type="checkbox" value="Mott Hall High School (Harlem)" /> Mott Hall High School (Harlem)</label><br>
-                    <label><input type="checkbox" value="Eagle Academy for Young Men of Harlem" /> Eagle Academy for Young Men of Harlem</label><br>
-                    <label><input type="checkbox" value="Urban Assembly School of Global Commerce" /> Urban Assembly School of Global Commerce</label><br>
-                    <label><input type="checkbox" value="A. Philip Randolph" /> A. Philip Randolph</label><br>
-                </div>
+      <h3>Your name is:</h3>
+      <div id="displayName">&nbsp;</div>
+    </div>
 
-                 <div id="name">
-                     <button id="submitButton">Submit</button>
-                 </div>
-
-                 <div id="title2">Your name is:</div>
-                 <span>(You can click the button to submit before checking that your name is correct)</span>
-                 <div id="displayName">&nbsp;</div>
-             </div>
     <div id="fullname2">
       <h3>Submitted Names:</h3>
       <ul id="submittedNamesList"></ul>
       <button id="saveButton">Save as Text File</button>
-      <button id="emailButton"><a href="mailto:xiaoyiliu96xyl@gmail.com">Email Names</a></button>
+      <button><a href="mailto:xiaoyiliu96xyl@gmail.com">Email Names</a></button>
     </div>
   </div>
 </div>
@@ -105,54 +81,32 @@
     const middleName = document.getElementById("middleName").value.trim();
     const lastName = document.getElementById("lastName").value.trim();
     const osisNumber = document.getElementById("osisNumber").value.trim();
-    const gradeLevelInput = document.getElementById("gradeLevel");
-    const gradeLevelRaw = gradeLevelInput.value.trim();
-
-    // Parse gradeLevel to integer explicitly
-    const gradeLevel = parseInt(gradeLevelRaw, 10);
-
     const school = Array.from(document.querySelectorAll('#schoolCheckboxes input[type="checkbox"]:checked'))
                         .map(cb => cb.value).join(', ');
 
-    // Validation
-    if (!firstName) {
-      alert("Please enter your first name.");
-      return;
-    }
-    if (!lastName) {
-      alert("Please enter your last name.");
-      return;
-    }
-    if (!osisNumber) {
-      alert("Please enter your OSIS Number/Student ID.");
-      return;
-    }
-    if (!gradeLevelRaw || isNaN(gradeLevel) || gradeLevel < 1 || gradeLevel > 12) {
-      alert("Please enter a valid grade level (1-12).");
-      gradeLevelInput.focus();
-      return;
-    }
-    if (!school) {
-      alert("Please select at least one school.");
-      return;
-    }
-
-    const fullName = `${firstName} ${middleName} ${lastName}`.replace(/\s+/g, ' ').trim();
+    const fullName = `${firstName} ${middleName} ${lastName}`.trim();
     document.getElementById("displayName").innerText = fullName;
 
     const li = document.createElement("li");
-    li.textContent = `${fullName} | Grade: ${gradeLevel} | OSIS: ${osisNumber} | School: ${school}`;
+    li.textContent = `${fullName} | OSIS: ${osisNumber} | School: ${school}`;
     document.getElementById("submittedNamesList").appendChild(li);
+  });
+
+  document.getElementById("saveToDBButton").addEventListener("click", () => {
+    const firstName = document.getElementById("firstName").value.trim();
+    const middleName = document.getElementById("middleName").value.trim();
+    const lastName = document.getElementById("lastName").value.trim();
+    const osisNumber = document.getElementById("osisNumber").value.trim();
+    const school = Array.from(document.querySelectorAll('#schoolCheckboxes input[type="checkbox"]:checked'))
+                        .map(cb => cb.value).join(', ');
 
     const data = {
       first_name: firstName,
       middle_name: middleName,
       last_name: lastName,
       osis_id: osisNumber,
-      school_name: school,
-      grade_level: gradeLevel  // ensure number, matches int2 in Supabase
+      school_name: school
     };
-
     saveToSupabase(data);
   });
 
