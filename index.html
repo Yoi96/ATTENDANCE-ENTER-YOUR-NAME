@@ -1,92 +1,161 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="css/style.css">
-    <title>Name Submission</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" type="text/css" href="css/style.css">
+  <title>Name Submission</title>
 </head>  
 <body>
 
 <div id="wrap">
-     <div id="main_body">
- 
-             <div id="fullname">
-                 <!---<div id="logo">&nbsp;</div>--->
-                 <img src="images/logos.png" height="65em" >
-                 <div id="fullname_title">Attendance</div>
-                <div id="fullname_title">Enter Your Name</div>
+  <div id="main_body">
+    <div id="fullname">
+      <img src="images/logos.png" height="65em">
+      <div id="fullname_title">Attendance</div>
+      <div id="fullname_title">Enter Your Name</div>
 
-                 <div id="name">
-                     <label for="firstName">First Name:</label>
-                 </div>
-                 <div id="name">
-                     <input type="text" id="firstName" placeholder="Type your first name...">
-                 </div>
+      <div id="name">
+        <label for="firstName">First Name:</label>
+        <input type="text" id="firstName" placeholder="Type your first name...">
+      </div>
 
+      <div id="name">
+        <label for="middleName">Middle Name:</label>
+        <input type="text" id="middleName" placeholder="Middle Name" />
+      </div>
 
-                  <div id="name">
-                     <label for="middleName">Middle Name:</label>
-                 </div>
-                 <input type="text" id="middleName" placeholder="Middle Name" />
+      <div id="name">
+        <label for="lastName">Last Name:</label>
+        <input type="text" id="lastName" placeholder="Type your last name...">
+      </div>
 
+      <div id="name">
+        <label for="osisNumber">OSIS Number/Student ID:</label>
+        <input type="text" id="osisNumber" placeholder="OSIS Number" />
+      </div>
 
-                 <div id="name">
-                     <label for="lastName">Last Name:</label>
-                 </div>
-                 <div id="name">
-                     <input type="text" id="lastName" placeholder="Type your last name...">
-                 </div>
+      <div id="name">
+        <label for="school">Your School:</label>
+      </div>
 
-                 <div id="name">
-                     <label for="osisnumber">OSIS Number/Studnet ID:</label>
-                 </div>
-                 <div id="name">
-                     <input type="text" id="osisNumber" placeholder="OSIS Number" />
+      <div id="schoolCheckboxes">
+        <label><input type="checkbox" value="Mott Hall High School (Harlem)"> Mott Hall High School (Harlem)</label><br>
+        <label><input type="checkbox" value="Eagle Academy for Young Men of Harlem"> Eagle Academy for Young Men of Harlem</label><br>
+        <label><input type="checkbox" value="Urban Assembly School of Global Commerce"> Urban Assembly School of Global Commerce</label><br>
+        <label><input type="checkbox" value="A. Philip Randolph"> A. Philip Randolph</label>
+      </div>
 
-                 </div>
+      <div id="name">
+        <button id="submitButton">Submit</button>
+      </div>
 
-                 <div id="name">
-                     <label for="osisnumber">Your School:</label>
-                 </div>
+      <div id="name">
+        <button id="saveToDBButton">Save to Database</button>
+      </div>
 
-                 <div id="schoolCheckboxes">
-                    <label><input type="checkbox" value="Mott Hall High School (Harlem)" /></label>
-                    <span class="schoolname">Mott Hall High School (Harlem)</span>
+      <div id="title2">Your name is:</div>
+      <span>(You can click the button to submit before checking that your name is correct)</span>
+      <div id="displayName">&nbsp;</div>
+    </div>
 
-                    <label><input type="checkbox" value="Eagle Academy for Young Men of Harlem" /> </label> 
-                    <span class="schoolname">Eagle Academy for Young Men of Harlem</span>
+    <div id="fullname2">
+      <div id="title3">Submitted Names:</div>
+      <ul id="submittedNamesList"></ul>
+      <button id="saveButton">Save Submitted Names as Text File</button>
+      <button id="emailButton"><a href="mailto:xiaoyiliu96xyl@gmail.com">Save Submitted Names as Email</a></button>
+    </div>
+  </div>
+</div>
 
-                    <label><input type="checkbox" value="Urban Assembly School of Global Commerce" /></label> 
-                    <span class="schoolname">Urban Assembly School of Global Commerce</span>
+<script>
+  const SUPABASE_URL = 'https://cpnbxqfduxtdufhdkuig.supabase.co';
+  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNwbmJ4cWZkdXh0ZHVmaGRrdWlnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDgwMjg2MjEsImV4cCI6MjA2MzYwNDYyMX0.ipVyFBRyfV_HQjDCR-_wzK-LMTuw0UE3x59gVPOtf7A';
 
-                    <label><input type="checkbox" value="A. Philip Randolph" /></label>
-                    <span class="schoolname">A. Philip Randolph</span>
-                </div>
+  async function saveToSupabase(data) {
+    try {
+      const response = await fetch(`${SUPABASE_URL}/rest/v1/students`, {
+        method: 'POST',
+        headers: {
+          'apikey': SUPABASE_KEY,
+          'Authorization': `Bearer ${SUPABASE_KEY}`,
+          'Content-Type': 'application/json',
+          'Prefer': 'return=minimal'
+        },
+        body: JSON.stringify(data)
+      });
 
+      if (!response.ok) throw new Error(await response.text());
+      alert("Saved to Supabase!");
+    } catch (error) {
+      console.error("Database error:", error);
+      alert("Failed to save to database.");
+    }
+  }
 
+  document.getElementById("submitButton").addEventListener("click", () => {
+    const firstName = document.getElementById("firstName").value.trim();
+    const middleName = document.getElementById("middleName").value.trim();
+    const lastName = document.getElementById("lastName").value.trim();
+    const osisNumber = document.getElementById("osisNumber").value.trim();
 
+    const schoolCheckboxes = document.querySelectorAll('#schoolCheckboxes input[type="checkbox"]');
+    let selectedSchool = "";
+    schoolCheckboxes.forEach(box => {
+      if (box.checked) selectedSchool = box.value;
+    });
 
+    const fullName = `${firstName} ${middleName} ${lastName}`.trim();
+    document.getElementById("displayName").innerText = fullName;
 
-                 <div id="name">
-                     <button id="submitButton">Submit</button>
-                 </div>
+    const listItem = document.createElement("li");
+    listItem.textContent = `${fullName} | OSIS: ${osisNumber} | School: ${selectedSchool}`;
+    document.getElementById("submittedNamesList").appendChild(listItem);
+  });
 
-                 <div id="title2">Your name is:</div>
-                 <span>(You can click the button to submit before checking that your name is correct)</span>
-                 <div id="displayName">&nbsp;</div>
-             </div>
+  document.getElementById("saveToDBButton").addEventListener("click", () => {
+    const firstName = document.getElementById("firstName").value.trim();
+    const middleName = document.getElementById("middleName").value.trim();
+    const lastName = document.getElementById("lastName").value.trim();
+    const osisNumber = document.getElementById("osisNumber").value.trim();
 
-             <div id="fullname2">
-                 <div id="title3">Submitted Names:</div>
-                 <ul id="submittedNamesList"></ul>
-                 <button id="saveButton">Save Submitted Names as Text File</button>
-                 <button id="emailButton"><a href="mailto:xiaoyiliu96xyl@gmail.com">Save Submitted Names as Email</a>
-                 </button>
-             </div>
-         </div>
-     </div>
- </div>
-    <script type="text/javascript" src="js/file-saver.js"></script>
+    const schoolCheckboxes = document.querySelectorAll('#schoolCheckboxes input[type="checkbox"]');
+    let selectedSchool = "";
+    schoolCheckboxes.forEach(box => {
+      if (box.checked) selectedSchool = box.value;
+    });
+
+    const studentData = {
+      first_name: firstName,
+      middle_name: middleName,
+      last_name: lastName,
+      osis_id: osisNumber,
+      school_name: selectedSchool
+    };
+
+    saveToSupabase(studentData);
+  });
+
+  // Save as text
+  document.getElementById("saveButton").addEventListener("click", () => {
+    const items = document.querySelectorAll("#submittedNamesList li");
+    if (items.length === 0) {
+      alert("No names to save.");
+      return;
+    }
+
+    let text = "";
+    items.forEach(item => {
+      text += item.textContent + "\n";
+    });
+
+    const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "submitted_names.txt";
+    a.click();
+  });
+</script>
+
 </body>
 </html>
