@@ -188,6 +188,36 @@
       a.download = "submitted_names.txt";
       a.click();
     });
+
+  document.getElementById("emailButton").addEventListener("click", async () => {
+  if (submittedData.length === 0) {
+    alert("No names to email.");
+    return;
+  }
+
+  // Compose email body
+  const namesToEmail = submittedData.map(entry =>
+    `${entry.first_name} ${entry.middle_name} ${entry.last_name} | Grade: ${entry.grade_level} | OSIS: ${entry.osis_id} | School: ${entry.school_name}`
+  ).join("\n");
+
+  // Create mailto link
+  const subject = encodeURIComponent('Submitted Student Names');
+  const body = encodeURIComponent(namesToEmail);
+  const mailtoLink = `mailto:?subject=${subject}&body=${body}`;
+
+  // Open user's default email client
+  window.location.href = mailtoLink;
+
+  // Optional: Save each entry again to Supabase to ensure it's stored
+  for (const entry of submittedData) {
+    try {
+      await saveToSupabase(entry);
+    } catch (e) {
+      console.error("Failed to re-save entry:", entry);
+    }
+  }
+});
+
 </script>
 
 
