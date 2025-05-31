@@ -2,106 +2,265 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="css/style.css">
-    <title>ATTENDANCE LIST</title>
-</head>  
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" type="text/css" href="css/style.css" />
+  <title>ATTENDANCE LIST</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
 <body>
 
 <div id="wrap">
-     <div id="main_body">
- 
-             <div id="fullname">
-                 <!---<div id="logo">&nbsp;</div>--->
-                 <img src="images/logos.png" height="65em" >
-                 <div id="fullname_title">Attendance</div>
-                <div id="fullname_title">Enter Your Name</div>
+  <div id="main_body">
+    <div id="fullname">
+      <img src="images/logos.png" height="65em">
+      <div id="fullname_title">Attendance</div>
+      <div id="fullname_title">Enter Your Name</div>
 
-                 <div id="name">
-                     <label for="firstName">First Name:</label>
-                 </div>
-                 <div id="name">
-                     <input type="text" id="firstName" placeholder="Type your first name...">
-                 </div>
+      <div id="name"><label for="firstName">First Name:</label></div>
+      <div id="name"><input type="text" id="firstName" placeholder="Type your first name..."></div>
 
+      <div id="name"><label for="middleName">Middle Name:</label></div>
+      <input type="text" id="middleName" placeholder="Middle Name" />
 
-                  <div id="name">
-                     <label for="middleName">Middle Name:</label>
-                 </div>
-                 <input type="text" id="middleName" placeholder="Middle Name" />
+      <div id="name"><label for="lastName">Last Name:</label></div>
+      <div id="name"><input type="text" id="lastName" placeholder="Type your last name..."></div>
 
+      <div id="name"><label for="osisNumber">OSIS Number/Student ID:</label></div>
+      <div id="name"><input type="text" id="osisNumber" placeholder="OSIS Number (123456789 if unknown)" /></div>
 
-                 <div id="name">
-                     <label for="lastName">Last Name:</label>
-                 </div>
-                 <div id="name">
-                     <input type="text" id="lastName" placeholder="Type your last name...">
-                 </div>
+      <div id="name"><label>Grade Level (1–12):</label></div>
+      <input type="text" id="gradelevel" placeholder="Grade Level" /><br/>
 
-                 <div id="name">
-                     <label for="osisnumber">OSIS Number/Studnet ID:</label>
-                 </div>
-                 <div id="name">
-                     <input type="text" id="osisNumber" placeholder="OSIS Number. If You don't know, please type 123456789" />
+      <div id="name"><label>Your School:</label></div>
+      <div id="schoolCheckboxes">
+        <label><input type="checkbox" value="Mott Hall High School (Harlem)"> <span class="schoolname">Mott Hall High School (Harlem)</span></label><br>
+        <label><input type="checkbox" value="Eagle Academy for Young Men of Harlem"> <span class="schoolname">Eagle Academy for Young Men of Harlem</span></label><br>
+        <label><input type="checkbox" value="Urban Assembly School of Global Commerce"> <span class="schoolname">Urban Assembly School of Global Commerce</span></label><br>
+        <label><input type="checkbox" value="A. Philip Randolph"> <span class="schoolname">A. Philip Randolph</span></label>
+      </div>
 
-                 </div>
+      <div id="name">
+        <button id="submitButton">Submit</button>
+      </div>
 
-                    <div id="name"><label>Grade Level (1–12):</label> </div>
-  <input type="text" id="gradelevel" placeholder="Grade Level" /><br/>
+      <div id="title2">Your name is:</div>
+      <span>(You can click the button to submit before checking that your name is correct)</span>
+      <div id="displayName">&nbsp;</div>
+    </div>
 
-                 <div id="name">
-                     <label for="osisnumber">Your School:</label>
-                 </div>
+    <div id="fullname2">
+      <div id="title3">Submitted Names:</div>
+      <ul id="submittedNamesList"></ul>
 
-                 <div id="schoolCheckboxes">
-                    <label><input type="checkbox" value="Mott Hall High School (Harlem)" /></label>
-                    <span class="schoolname">Mott Hall High School (Harlem)</span>
+      <table id="studentTable" style="display:none;">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>First Name</th>
+            <th>Middle Name</th>
+            <th>Last Name</th>
+            <th>OSIS ID</th>
+            <th>School Name</th>
+            <th>Grade Level</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="studentBody"></tbody>
+      </table>
 
-                    <label><input type="checkbox" value="Eagle Academy for Young Men of Harlem" /> </label> 
-                    <span class="schoolname">Eagle Academy for Young Men of Harlem</span>
-
-                    <label><input type="checkbox" value="Urban Assembly School of Global Commerce" /></label> 
-                    <span class="schoolname">Urban Assembly School of Global Commerce</span>
-
-                    <label><input type="checkbox" value="A. Philip Randolph" /></label>
-                    <span class="schoolname">A. Philip Randolph</span>
-                </div>
-
-
-
-
-
-                 <div id="name">
-                     <button id="submitButton">Submit</button>
-                 </div>
-
-                 <div id="title2">Your name is:</div>
-                 <span>(You can click the button to submit before checking that your name is correct)</span>
-                 <div id="displayName">&nbsp;</div>
-             </div>
-
-             <div id="fullname2">
-                 <div id="title3">Submitted Names:</div>
-                 <ul id="submittedNamesList"></ul>
-                 <button id="saveButton">Save Submitted Names as Text File</button>
-                 <button id="emailButton"><a href="mailto:xiaoyiliu96xyl@gmail.com">Save Submitted Names as Email</a>
-                 </button>
-             </div>
-         </div>
-     </div>
- </div>
-
-
-
+      <button id="saveButton">Save Submitted Names as Text File</button>
+      <button id="emailButton"><a href="mailto:xiaoyiliu96xyl@gmail.com">Save Submitted Names as Email</a></button>
+    </div>
+  </div>
+</div>
 
 <script>
-const _0x5933cc=_0x3d17;function _0x3d17(_0x4956cc,_0x15d9f8){const _0x57dae8=_0x57da();return _0x3d17=function(_0x3d1748,_0x2a0f2d){_0x3d1748=_0x3d1748-0x10c;let _0x49d48f=_0x57dae8[_0x3d1748];return _0x49d48f;},_0x3d17(_0x4956cc,_0x15d9f8);}function _0x57da(){const _0x53f1c6=['</td>\x0a\x20\x20\x20\x20\x20\x20\x20\x20<td><button\x20onclick=\x22removeStudent(','slice','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNwbmJ4cWZkdXh0ZHVmaGRrdWlnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDgwMjg2MjEsImV4cCI6MjA2MzYwNDYyMX0.ipVyFBRyfV_HQjDCR-_wzK-LMTuw0UE3x59gVPOtf7A','335272PTzZsK','8545cYsbXk','order','textContent','&body=','select','Attendance\x20List\x20for\x20','removeStudent','#schoolCheckboxes\x20input[type=\x22checkbox\x22]','forEach','appendChild','table','utils','writeFile','osis_id','json_to_sheet','value','join','getFullYear','This\x20OSIS\x20number\x20has\x20already\x20been\x20used.\x20Please\x20check\x20your\x20entry.',',\x20School:\x20','firstName','log','createElement','OSIS\x20number\x20must\x20be\x20a\x209-digit\x20number.','middleName','stringify','Are\x20you\x20sure\x20you\x20want\x20to\x20delete\x20student\x20ID\x20','display','<tr><td\x20colspan=\x229\x22>No\x20data\x20found.</td></tr>','last_name','1409zHhAts','addEventListener','book_append_sheet','middle_name','7ZwByBw','submitButton','style','length','https://cpnbxqfduxtdufhdkuig.supabase.co','book_new','mailto:?subject=Attendance\x20List\x20-\x20','click','students','filter','getDate','location','</td>\x0a\x20\x20\x20\x20\x20\x20\x20\x20<td>','from',',\x20Grade:\x20','grade_level','toISOString','trim','gradelevel','Failed\x20to\x20delete:\x20','30gAFLmH','displayName','1254IiONuN',',\x20Date:\x20','Please\x20fill\x20in\x20all\x20required\x20fields.','Attendance_List_','studentBody','20SLgnqv','getElementById','checked','emailDataBtn',':\x0a\x0a','14139ezbMCC','.xlsx','error','date_submitted','\x20-\x20','createClient','ID:\x20','\x20Grade\x20Level:\x20','Saved\x20to\x20Supabase.','Error\x20saving\x20to\x20Supabase.','padStart','first_name','1744116voyxvO','No\x20data\x20to\x20email.','Saved\x20successfully!','innerHTML','href','Error\x20loading\x20data:\x20','getMonth','map','588861wOeivT','\x20OSIS:\x20','1680828TFNHhS','Grade\x20level\x20must\x20be\x20between\x201\x20and\x2012.','1006nDcFVU'];_0x57da=function(){return _0x53f1c6;};return _0x57da();}(function(_0x22ef11,_0x42c791){const _0x97590b=_0x3d17,_0x414640=_0x22ef11();while(!![]){try{const _0x42b080=-parseInt(_0x97590b(0x13f))/0x1*(-parseInt(_0x97590b(0x11c))/0x2)+parseInt(_0x97590b(0x163))/0x3*(-parseInt(_0x97590b(0x15e))/0x4)+parseInt(_0x97590b(0x121))/0x5*(-parseInt(_0x97590b(0x159))/0x6)+parseInt(_0x97590b(0x143))/0x7*(-parseInt(_0x97590b(0x120))/0x8)+-parseInt(_0x97590b(0x118))/0x9*(-parseInt(_0x97590b(0x157))/0xa)+-parseInt(_0x97590b(0x110))/0xb+parseInt(_0x97590b(0x11a))/0xc;if(_0x42b080===_0x42c791)break;else _0x414640['push'](_0x414640['shift']());}catch(_0x28f309){_0x414640['push'](_0x414640['shift']());}}}(_0x57da,0x71400));const SUPABASE_URL=_0x5933cc(0x147),SUPABASE_KEY=_0x5933cc(0x11f),client=supabase[_0x5933cc(0x168)](SUPABASE_URL,SUPABASE_KEY),firstNameInput=document[_0x5933cc(0x15f)](_0x5933cc(0x135)),middleNameInput=document[_0x5933cc(0x15f)](_0x5933cc(0x139)),lastNameInput=document[_0x5933cc(0x15f)]('lastName'),osisNumberInput=document['getElementById']('osisNumber'),gradeLevelInput=document[_0x5933cc(0x15f)](_0x5933cc(0x155)),schoolCheckboxes=document['querySelectorAll'](_0x5933cc(0x128)),displayNameDiv=document['getElementById'](_0x5933cc(0x158)),submitButton=document['getElementById'](_0x5933cc(0x144)),studentTable=document['getElementById']('studentTable'),studentBody=document[_0x5933cc(0x15f)](_0x5933cc(0x15d)),exportExcelBtn=document['getElementById']('exportExcelBtn'),emailDataBtn=document[_0x5933cc(0x15f)](_0x5933cc(0x161));let currentStudentsData=[];function formatDateMMDDYYYY(_0x18d8d5){const _0x5b3a7c=_0x5933cc;if(!_0x18d8d5)return'';const _0x5cd061=new Date(_0x18d8d5);if(isNaN(_0x5cd061))return _0x18d8d5;const _0x33638a=String(_0x5cd061[_0x5b3a7c(0x116)]()+0x1)[_0x5b3a7c(0x10e)](0x2,'0'),_0x8c58cc=String(_0x5cd061[_0x5b3a7c(0x14d)]())[_0x5b3a7c(0x10e)](0x2,'0'),_0x50af2a=_0x5cd061[_0x5b3a7c(0x132)]();return _0x33638a+'/'+_0x8c58cc+'/'+_0x50af2a;}function updateDisplayName(){const _0x22d968=_0x5933cc,_0x4e2fcf=firstNameInput[_0x22d968(0x130)]['trim'](),_0x4f5b43=middleNameInput[_0x22d968(0x130)][_0x22d968(0x154)](),_0x19dda2=lastNameInput[_0x22d968(0x130)]['trim'](),_0x414949=osisNumberInput[_0x22d968(0x130)][_0x22d968(0x154)](),_0x1a3f87=gradeLevelInput[_0x22d968(0x130)][_0x22d968(0x154)](),_0x4931ec=Array[_0x22d968(0x150)](schoolCheckboxes)[_0x22d968(0x14c)](_0x193c73=>_0x193c73[_0x22d968(0x160)])['map'](_0x23adad=>_0x23adad[_0x22d968(0x130)]);displayNameDiv[_0x22d968(0x123)]=_0x4e2fcf+'\x20'+_0x4f5b43+'\x20'+_0x19dda2+_0x22d968(0x119)+_0x414949+_0x22d968(0x16a)+_0x1a3f87+(_0x4931ec[_0x22d968(0x146)]?_0x22d968(0x167)+_0x4931ec[_0x22d968(0x131)](',\x20'):'');}[firstNameInput,middleNameInput,lastNameInput,osisNumberInput,gradeLevelInput][_0x5933cc(0x129)](_0x32c078=>{const _0x44255d=_0x5933cc;_0x32c078[_0x44255d(0x140)]('input',updateDisplayName);});async function saveToSupabase(_0x46a56b){const _0x15ed67=_0x5933cc,{error:_0x33626c}=await client[_0x15ed67(0x150)]('students')['insert']([_0x46a56b]);return _0x33626c?(console[_0x15ed67(0x165)]('Supabase\x20error:',_0x33626c),alert(_0x15ed67(0x10d)),![]):(console[_0x15ed67(0x136)](_0x15ed67(0x10c)),!![]);}submitButton[_0x5933cc(0x140)](_0x5933cc(0x14a),async()=>{const _0x5e01d2=_0x5933cc,_0x40c33c=firstNameInput['value'][_0x5e01d2(0x154)](),_0x55964b=middleNameInput['value']['trim'](),_0x35ccfb=lastNameInput['value'][_0x5e01d2(0x154)](),_0x584210=osisNumberInput[_0x5e01d2(0x130)]['trim'](),_0x4a9af5=gradeLevelInput[_0x5e01d2(0x130)][_0x5e01d2(0x154)](),_0x334656=Array[_0x5e01d2(0x150)](schoolCheckboxes)[_0x5e01d2(0x14c)](_0x378a7d=>_0x378a7d[_0x5e01d2(0x160)])[_0x5e01d2(0x117)](_0x3dbdb5=>_0x3dbdb5[_0x5e01d2(0x130)]);if(!_0x40c33c||!_0x35ccfb||!_0x584210||!_0x4a9af5||_0x334656[_0x5e01d2(0x146)]===0x0){alert(_0x5e01d2(0x15b));return;}if(_0x584210[_0x5e01d2(0x146)]!==0x9||isNaN(_0x584210)){alert(_0x5e01d2(0x138));return;}const _0x3043c0=parseInt(_0x4a9af5,0xa);if(isNaN(_0x3043c0)||_0x3043c0<0x1||_0x3043c0>0xc){alert(_0x5e01d2(0x11b));return;}const {data:_0x1ba16b,error:_0x1449d5}=await client[_0x5e01d2(0x150)](_0x5e01d2(0x14b))[_0x5e01d2(0x125)](_0x5e01d2(0x12e))['eq'](_0x5e01d2(0x12e),_0x584210);if(_0x1449d5){alert('Error\x20checking\x20OSIS\x20number\x20uniqueness.'),console[_0x5e01d2(0x165)](_0x1449d5);return;}if(_0x1ba16b&&_0x1ba16b['length']>0x0){alert(_0x5e01d2(0x133));return;}const _0x457d10={'first_name':_0x40c33c,'middle_name':_0x55964b,'last_name':_0x35ccfb,'osis_id':_0x584210,'grade_level':_0x3043c0,'school_name':_0x334656[_0x5e01d2(0x131)](',\x20')},_0x394624=await saveToSupabase(_0x457d10);if(!_0x394624)return;alert(_0x5e01d2(0x112)),[firstNameInput,middleNameInput,lastNameInput,osisNumberInput,gradeLevelInput][_0x5e01d2(0x129)](_0x36b2e6=>_0x36b2e6[_0x5e01d2(0x130)]=''),schoolCheckboxes['forEach'](_0xe0cf38=>_0xe0cf38[_0x5e01d2(0x160)]=![]),displayNameDiv[_0x5e01d2(0x123)]='',loadStudents();});async function loadStudents(){const _0x72e413=_0x5933cc,{data:_0x3e7604,error:_0x263952}=await client[_0x72e413(0x150)](_0x72e413(0x14b))['select']('*')[_0x72e413(0x122)]('ID',{'ascending':!![]});studentBody[_0x72e413(0x113)]='';if(_0x263952){alert(_0x72e413(0x115)+JSON[_0x72e413(0x13a)](_0x263952));return;}currentStudentsData=_0x3e7604||[];if(!_0x3e7604[_0x72e413(0x146)]){studentBody[_0x72e413(0x113)]=_0x72e413(0x13d),studentTable['style'][_0x72e413(0x13c)]='table';return;}_0x3e7604[_0x72e413(0x129)](_0x4be1be=>{const _0x4c2409=_0x72e413,_0x3301ae=document[_0x4c2409(0x137)]('tr');_0x3301ae['innerHTML']='\x0a\x20\x20\x20\x20\x20\x20\x20\x20<td>'+_0x4be1be['ID']+_0x4c2409(0x14f)+(_0x4be1be[_0x4c2409(0x10f)]||'')+_0x4c2409(0x14f)+(_0x4be1be[_0x4c2409(0x142)]||'')+_0x4c2409(0x14f)+(_0x4be1be[_0x4c2409(0x13e)]||'')+_0x4c2409(0x14f)+(_0x4be1be['osis_id']||'')+_0x4c2409(0x14f)+(_0x4be1be['school_name']||'')+_0x4c2409(0x14f)+(_0x4be1be[_0x4c2409(0x152)]||'')+_0x4c2409(0x14f)+formatDateMMDDYYYY(_0x4be1be[_0x4c2409(0x166)])+_0x4c2409(0x11d)+_0x4be1be['ID']+')\x22\x20id=\x22removeStudentbutton\x22>Remove</button></td>\x0a\x20\x20\x20\x20\x20\x20',studentBody[_0x4c2409(0x12a)](_0x3301ae);}),studentTable[_0x72e413(0x145)][_0x72e413(0x13c)]=_0x72e413(0x12b);}async function removeStudent(_0x31eced){const _0x33b9db=_0x5933cc;if(!confirm(_0x33b9db(0x13b)+_0x31eced+'?'))return;const {error:_0x16cbe1}=await client['from']('students')['delete']()['eq']('ID',_0x31eced);_0x16cbe1?alert(_0x33b9db(0x156)+JSON[_0x33b9db(0x13a)](_0x16cbe1)):loadStudents();}exportExcelBtn[_0x5933cc(0x140)](_0x5933cc(0x14a),()=>{const _0x9904a9=_0x5933cc;if(!currentStudentsData[_0x9904a9(0x146)]){alert('No\x20data\x20to\x20export.');return;}const _0x1e84c2=new Date()[_0x9904a9(0x153)]()[_0x9904a9(0x11e)](0x0,0xa),_0x54943c=currentStudentsData[_0x9904a9(0x117)](({ID:_0x53cdb1,first_name:_0x25f125,middle_name:_0x59b448,last_name:_0x2cd3f5,osis_id:_0x26e732,school_name:_0x561f92,grade_level:_0x39b93b,date_submitted:_0x103087})=>({'ID':_0x53cdb1,'First\x20Name':_0x25f125,'Middle\x20Name':_0x59b448,'Last\x20Name':_0x2cd3f5,'OSIS\x20ID':_0x26e732,'School\x20Name':_0x561f92,'Grade\x20Level':_0x39b93b,'Date':formatDateMMDDYYYY(_0x103087)})),_0x22135d=XLSX[_0x9904a9(0x12c)][_0x9904a9(0x12f)](_0x54943c),_0x1c15e7=XLSX[_0x9904a9(0x12c)][_0x9904a9(0x148)]();XLSX[_0x9904a9(0x12c)][_0x9904a9(0x141)](_0x1c15e7,_0x22135d,'Students'),XLSX[_0x9904a9(0x12d)](_0x1c15e7,_0x9904a9(0x15c)+_0x1e84c2+_0x9904a9(0x164));}),emailDataBtn[_0x5933cc(0x140)](_0x5933cc(0x14a),()=>{const _0x4b4690=_0x5933cc;if(!currentStudentsData[_0x4b4690(0x146)]){alert(_0x4b4690(0x111));return;}const _0x3695e2=new Date()[_0x4b4690(0x153)]()['slice'](0x0,0xa);let _0x4eaa62=_0x4b4690(0x126)+_0x3695e2+_0x4b4690(0x162);currentStudentsData[_0x4b4690(0x129)](({ID:_0xbdb73,first_name:_0x408754,middle_name:_0x11df57,last_name:_0xc2a553,osis_id:_0x47a494,school_name:_0x2dcdb6,grade_level:_0x2cc5d4,date_submitted:_0x218b37})=>{const _0x54b694=_0x4b4690;_0x4eaa62+=_0x54b694(0x169)+_0xbdb73+',\x20Name:\x20'+_0x408754+'\x20'+_0x11df57+'\x20'+_0xc2a553+',\x20OSIS:\x20'+_0x47a494+_0x54b694(0x134)+_0x2dcdb6+_0x54b694(0x151)+_0x2cc5d4+_0x54b694(0x15a)+formatDateMMDDYYYY(_0x218b37)+'\x0a';});const _0x5190f2=_0x4b4690(0x149)+_0x3695e2+_0x4b4690(0x124)+encodeURIComponent(_0x4eaa62);window[_0x4b4690(0x14e)][_0x4b4690(0x114)]=_0x5190f2;}),window[_0x5933cc(0x127)]=removeStudent,window[_0x5933cc(0x140)]('DOMContentLoaded',()=>{loadStudents();});
+  function _0x5048(){const _0xb53803=['15211OvppRi','1352TuJZXV','26870301eJovTo','82202oKGMXg','3UTlBkf','2514534sqQynI','1514664YxElnK','1009678snZmuO','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNwbmJ4cWZkdXh0ZHVmaGRrdWlnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDgwMjg2MjEsImV4cCI6MjA2MzYwNDYyMX0.ipVyFBRyfV_HQjDCR-_wzK-LMTuw0UE3x59gVPOtf7A','4242445aoIumE'];_0x5048=function(){return _0xb53803;};return _0x5048();}function _0x3308(_0x239080,_0x19b270){const _0x5048e4=_0x5048();return _0x3308=function(_0x33088a,_0x427b22){_0x33088a=_0x33088a-0x1ec;let _0x2cec05=_0x5048e4[_0x33088a];return _0x2cec05;},_0x3308(_0x239080,_0x19b270);}const _0x131b43=_0x3308;(function(_0x31f145,_0x2bd53f){const _0x36ef8f=_0x3308,_0x57b88e=_0x31f145();while(!![]){try{const _0x5c9f73=-parseInt(_0x36ef8f(0x1ef))/0x1+parseInt(_0x36ef8f(0x1f5))/0x2*(-parseInt(_0x36ef8f(0x1ec))/0x3)+-parseInt(_0x36ef8f(0x1ee))/0x4+-parseInt(_0x36ef8f(0x1f1))/0x5+-parseInt(_0x36ef8f(0x1ed))/0x6+parseInt(_0x36ef8f(0x1f2))/0x7*(parseInt(_0x36ef8f(0x1f3))/0x8)+parseInt(_0x36ef8f(0x1f4))/0x9;if(_0x5c9f73===_0x2bd53f)break;else _0x57b88e['push'](_0x57b88e['shift']());}catch(_0x1539c5){_0x57b88e['push'](_0x57b88e['shift']());}}}(_0x5048,0xa01bb));const SUPABASE_URL='https://cpnbxqfduxtdufhdkuig.supabase.co',SUPABASE_KEY=_0x131b43(0x1f0);
 
+  const client = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  const firstNameInput = document.getElementById('firstName');
+  const middleNameInput = document.getElementById('middleName');
+  const lastNameInput = document.getElementById('lastName');
+  const osisNumberInput = document.getElementById('osisNumber');
+  const gradeLevelInput = document.getElementById('gradelevel');
+  const schoolCheckboxes = document.querySelectorAll('#schoolCheckboxes input[type="checkbox"]');
+  const displayNameDiv = document.getElementById('displayName');
+  const submitButton = document.getElementById('submitButton');
+  const saveButton = document.getElementById('saveButton');
+  const emailButton = document.getElementById('emailButton');
+  const submittedNamesList = document.getElementById('submittedNamesList');
+
+  let submittedNames = JSON.parse(localStorage.getItem('submittedNames')) || [];
+
+  function renderNames() {
+    submittedNamesList.innerHTML = '';
+    submittedNames.forEach((entry, index) => {
+      const li = document.createElement('li');
+      li.textContent = `${index + 1}: ${entry}`;
+      const removeButton = document.createElement('button');
+      removeButton.textContent = 'Remove';
+      removeButton.onclick = () => removeName(index);
+      li.appendChild(removeButton);
+      submittedNamesList.appendChild(li);
+    });
+  }
+
+  function updateDisplayName() {
+    const firstName = firstNameInput.value.trim();
+    const middleName = middleNameInput.value.trim();
+    const lastName = lastNameInput.value.trim();
+    const osisNumber = osisNumberInput.value.trim();
+    const gradeLevel = gradeLevelInput.value.trim();
+    const selectedSchools = Array.from(schoolCheckboxes).filter(cb => cb.checked).map(cb => cb.value);
+    displayNameDiv.textContent = `${firstName} ${middleName} ${lastName} OSIS: ${osisNumber} Grade Level: ${gradeLevel}${selectedSchools.length ? ' - ' + selectedSchools.join(', ') : ''}`;
+  }
+
+  [firstNameInput, middleNameInput, lastNameInput, osisNumberInput, gradeLevelInput].forEach(input => {
+    input.addEventListener('input', updateDisplayName);
+  });
+
+  function removeName(index) {
+    submittedNames.splice(index, 1);
+    localStorage.setItem('submittedNames', JSON.stringify(submittedNames));
+    renderNames();
+  }
+
+  async function saveToSupabase(data) {
+    const { error } = await client.from('students').insert([data]);
+    if (error) {
+      console.error('Supabase error:', error);
+      alert('Error saving to Supabase.');
+    } else {
+      console.log('Saved to Supabase.');
+    }
+  }
+
+  submitButton.addEventListener('click', async () => {
+    const firstName = firstNameInput.value.trim();
+    const middleName = middleNameInput.value.trim();
+    const lastName = lastNameInput.value.trim();
+    const osisNumber = osisNumberInput.value.trim();
+    const gradeLevel = gradeLevelInput.value.trim();
+    const selectedSchools = Array.from(schoolCheckboxes).filter(cb => cb.checked).map(cb => cb.value);
+
+    if (!firstName || !lastName || !osisNumber || !gradeLevel || selectedSchools.length === 0) {
+      alert('Please fill in all required fields.');
+      return;
+    }
+
+    if (osisNumber.length !== 9 || isNaN(osisNumber)) {
+      alert('OSIS number must be a 9-digit number.');
+      return;
+    }
+
+    const grade = parseInt(gradeLevel, 10);
+    if (isNaN(grade) || grade < 1 || grade > 12) {
+      alert('Grade level must be between 1 and 12.');
+      return;
+    }
+
+    const osisExists = submittedNames.some(entry => entry.includes(`OSIS: ${osisNumber}`));
+    if (osisExists) {
+      alert('This OSIS number has already been submitted.');
+      return;
+    }
+
+    const fullEntry = `${firstName}, ${middleName}, ${lastName}, OSIS: ${osisNumber}, Grade Level: ${grade} - ${selectedSchools.join(', ')}`;
+    submittedNames.push(fullEntry);
+    localStorage.setItem('submittedNames', JSON.stringify(submittedNames));
+    renderNames();
+
+    const dbData = {
+      first_name: firstName,
+      middle_name: middleName,
+      last_name: lastName,
+      osis_id: osisNumber,
+      grade_level: grade,
+      school_name: selectedSchools.join(', ')
+    };
+    await saveToSupabase(dbData);
+
+    [firstNameInput, middleNameInput, lastNameInput, osisNumberInput, gradeLevelInput].forEach(input => input.value = '');
+    schoolCheckboxes.forEach(cb => cb.checked = false);
+    displayNameDiv.textContent = '';
+  });
+
+  saveButton.addEventListener('click', () => {
+    if (submittedNames.length === 0) {
+      alert('No names to save.');
+      return;
+    }
+
+    const blob = new Blob([submittedNames.join('\n')], { type: 'text/plain' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'submitted_names.txt';
+    a.click();
+  });
+
+  emailButton.addEventListener('click', () => {
+    if (submittedNames.length === 0) {
+      alert('No names to email.');
+      return;
+    }
+
+    const subject = encodeURIComponent('Submitted Names');
+    const body = encodeURIComponent(submittedNames.join('\n'));
+    window.location.href = `mailto:?subject=${subject}&body=${body}`;
+  });
+
+  async function loadStudents() {
+    const { data, error } = await client.from('students').select('*').order('ID', { ascending: true });
+    const table = document.getElementById('studentTable');
+    const tbody = document.getElementById('studentBody');
+    tbody.innerHTML = '';
+
+    if (error) {
+      alert('Error loading data: ' + JSON.stringify(error));
+      return;
+    }
+
+    if (!data.length) {
+      tbody.innerHTML = '<tr><td colspan="8">No data found.</td></tr>';
+      table.style.display = 'table';
+      return;
+    }
+
+    data.forEach(student => {
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>${student.ID}</td>
+        <td>${student.first_name || ''}</td>
+        <td>${student.middle_name || ''}</td>
+        <td>${student.last_name || ''}</td>
+        <td>${student.osis_id || ''}</td>
+        <td>${student.school_name || ''}</td>
+        <td>${student.grade_level || ''}</td>
+        <td><button onclick="removeStudent(${student.ID})">Remove</button></td>
+      `;
+      tbody.appendChild(row);
+    });
+
+    table.style.display = 'table';
+  }
+
+  async function removeStudent(id) {
+    if (!confirm(`Are you sure you want to delete student ID ${id}?`)) return;
+    const { error } = await client.from('students').delete().eq('ID', id);
+    if (error) {
+      alert('Failed to delete: ' + JSON.stringify(error));
+    } else {
+      loadStudents();
+    }
+  }
+
+  window.addEventListener('DOMContentLoaded', () => {
+    renderNames();
+    loadStudents();
+  });
 </script>
-
-
-
 
 </body>
 </html>
